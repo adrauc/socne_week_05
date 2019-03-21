@@ -211,7 +211,7 @@
   Hint: Type g at the command prompt.
 
 - Class: text
-  Output: If you want to cahnge something on the y-axis, just use axis.text.y instead.
+  Output: If you want to change something on the y-axis, just use axis.text.y instead.
   
 
 - Class: cmd_question
@@ -221,7 +221,7 @@
   Hint: Type g + scale_y_continuous(expand=c(0,0)) at the command prompt.    
 
 - Class: text
-  Output: We use _y_ as we want to change something on the y axis and continuous as we have continious data (numeric) for y.
+  Output: We use _y_ as we want to change something on the y axis and continuous as we have continuous data (numeric) for y.
   
 
 - Class: cmd_question
@@ -314,5 +314,5 @@
 
 
 - Class: text
-  Output: Ok, that's it for today - check out the code I created and try to work on own examples.
+  Output: Ok, that's it for today - check out the code I created and try to work with own examples.
 
