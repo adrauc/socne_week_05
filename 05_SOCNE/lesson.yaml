@@ -55,16 +55,16 @@
   Output: I have downloaded some data for you - tweets_loc <- search_tweets("taipei", n = 10000, type = "recent", include_rts = TRUE, token = twitter_token) - tweets mentioning Taipei
 
 - Class: text
-  Output:  Two build a plot - we proceed step by step.
+  Output:  To build a plot - we proceed step by step.
 
 - Class: cmd_question
-  Output: Let's firsts prepare the user data. Extract the user information with the function users_data() and save it in a new object user_taipei
+  Output: Let's firsts prepare the user data. Extract the user information from the object tweets_loc with the function users_data() and save it in a new object user_taipei
   CorrectAnswer: user_taipei <- users_data(tweets_loc)
   AnswerTests: expr_creates_var("user_taipei"); omnitest(correctExpr='user_taipei <- users_data(tweets_loc)')
   Hint: Type user_taipei <- users_data(tweets_loc) at the command prompt.
 
 - Class: cmd_question
-  Output: As you probably remember, we have a few duplicated users - let's filter them. Use duplicated inside of the box brackets for the rows and save the users in the same object.
+  Output: As you probably remember, we have a few duplicated users - let's filter them. Use duplicated() (don`t forget to add the !) inside of the box brackets with the column user_id that you subset with the $ for the rows and save the users in the same object.
   CorrectAnswer: user_taipei <- user_taipei[!duplicated(user_taipei$user_id), ]
   AnswerTests: omnitest(correctExpr='user_taipei <- user_taipei[!duplicated(user_taipei$user_id), ]')
   Hint: Type user_taipei <- user_taipei[!duplicated(user_taipei$user_id), ] at the command prompt.
@@ -225,10 +225,10 @@
   
 
 - Class: cmd_question
-  Output: We can add limits as argument to get some space at the top. Write the same function as before (press arrow key up) - and add limit(0, 1100) as second argument. Save all in g.
-  CorrectAnswer:  g <- g + scale_y_continuous(expand=c(0,0), limits = c(0,1100))
-  AnswerTests: omnitest(correctExpr='g <- g + scale_y_continuous(expand=c(0,0), limits = c(0,1100))')
-  Hint: Type g <- g + scale_y_continuous(expand=c(0,0), limits = c(0,1100)) at the command prompt.    
+  Output: We can add limits as argument to get some space at the top. Write the same function as before (press arrow key up) - and add limit(0, 2400) as second argument. Save all in g.
+  CorrectAnswer:  g <- g + scale_y_continuous(expand=c(0,0), limits = c(0,2400))
+  AnswerTests: omnitest(correctExpr='g <- g + scale_y_continuous(expand=c(0,0), limits = c(0,2400))')
+  Hint: Type g <- g + scale_y_continuous(expand=c(0,0), limits = c(0,2400)) at the command prompt.    
   
 - Class: cmd_question
   Output: Just type g
@@ -246,16 +246,19 @@
   Hint: Type ?seq at the command prompt.    
 
 - Class: cmd_question
-  Output: Now create a sequence from 0 to 1100 by 100 steps.
-  CorrectAnswer:  seq(0, 1100, 100)
-  AnswerTests: omnitest(correctExpr='seq(0, 1100, 100)')
-  Hint: Use 0, 1100 and 100 as arguments in seq() and just type it at the command prompt.    
+  Output: Now create a sequence from 0 to 2400 by 100 steps.
+  CorrectAnswer:  seq(0, 2400, 100)
+  AnswerTests: omnitest(correctExpr='seq(0, 2400, 100)')
+  Hint: Use 0, 2400 and 100 as arguments in seq() and just type it at the command prompt.    
 
 - Class: cmd_question
-  Output: Now we use seq(0, 1100, 100) as argument in scale_y_continuous(breaks = seq(0, 1100, 100)) - add this to g without saving.
-  CorrectAnswer:  g + scale_y_continuous(breaks = seq(0, 1100, 100))
-  AnswerTests: omnitest(correctExpr='g + scale_y_continuous(breaks = seq(0, 1100, 100))')
-  Hint: Type g + scale_y_continuous(breaks = seq(0, 1100, 100)) at the command prompt. 
+  Output: Now we use seq(0, 2400, 100) as argument in scale_y_continuous(breaks = seq(0, 2400, 100)) - add this to g without saving.
+  CorrectAnswer:  g + scale_y_continuous(breaks = seq(0, 2400, 100))
+  AnswerTests: omnitest(correctExpr='g + scale_y_continuous(breaks = seq(0, 2400, 100))')
+  Hint: Type g + scale_y_continuous(breaks = seq(0, 2400, 100)) at the command prompt. 
+  
+- Class: text
+  Output: You see a warning now. If you have already used scale_y_continuous, it will be overwritten by the new scale_y_continuous. Next time you create a plot just add all arguments together to scale_y_continuous.
   
 - Class: text
   Output: Great! Let's continue with scatterplots.
