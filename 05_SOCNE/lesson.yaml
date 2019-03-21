@@ -1,0 +1,315 @@
+- Class: meta
+  Course: SOCNE WEEK 05
+  Lesson: 05 SOCNE
+  Author: Adrian Rauchfleisch (borrowed parts from Nick Carchedi)
+  Type: Standard
+  Organization: National Taiwan University
+  Version: 2.4.3
+
+
+- Class: text
+  Output: Dear Taida students, welcome to my R and RStudio introduction course. Whenever you see three points below (e.g. `...`) then press the Enter-key to continue the lesson. Now press the Enter-key to continue.
+
+- Class: text
+  Output: In this lesson, we`ll cover the package ggplot2 and how to visualize Twitter data.
+
+- Class: text
+  Output:  The ggplot2 package is an add-on package available from CRAN via install.packages(). (Don't worry, I've installed it for you already.) It is an implementation of The Grammar of Graphics, an abstract concept (as well as book) authored and invented by Leland Wilkinson and implemented by Hadley Wickham while he was a graduate student at Iowa State. The web site http://ggplot2.org provides complete documentation.
+
+- Class: text
+  Output: A grammar of graphics represents an abstraction of graphics, that is,  a theory of graphics which conceptualizes basic pieces from which you can build new graphics and graphical objects. The  goal of the grammar is to “Shorten the distance from mind to page”. From Hadley Wickham's book  we learn that 
+
+- Class: text
+  Output:  The ggplot2 package "is composed of a set of independent components that can be composed in many different ways. ... you can create new graphics that are precisely tailored for your problem." These components include aesthetics which are attributes such as colour, shape, and  size, and geometric objects or geoms such as points, lines, and bars.  
+
+- Class: text
+  Output: ggplot2 combines the best of base and lattice. It allows for multipanel (conditioning) plots (as lattice does) but also post facto annotation (as base does), so you can add titles and labels. It uses the low-level grid package (which comes with R) to draw the graphics. As part of its grammar philosophy, ggplot2 plots are composed of aesthetics (attributes such as size, shape, color) and geoms (points, lines, and bars), the geometric objects you see on the plot.
+
+- Class: text
+  Output: The ggplot2 package has 2 workhorse functions. The more basic workhorse function is qplot, (think quick plot), which works like the plot function in the base graphics system. It can produce many types of plots (scatter, histograms, box and whisker) while hiding tedious details from the user. Similar to lattice functions, it looks for data in a data frame or parent environment. 
+
+- Class: text
+  Output: The more advanced workhorse function in the package is ggplot, which is  more flexible and can be customized for doing things qplot cannot do. In this lesson we'll focus on ggplot2.
+    
+- Class: mult_question
+  Output:  Do you remember what the gg of ggplot2 stands for?
+  AnswerChoices: goto graphics; grammar of graphics; great graphics; good grief
+  CorrectAnswer: grammar of graphics
+  AnswerTests: omnitest(correctVal='grammar of graphics')
+  Hint: Think about nouns, verbs, and adjectives.
+
+- Class: text
+  Output:  A "grammar" of graphics means that ggplot2 contains building blocks with which you can create your own graphical objects. What are these basic components of ggplot2 plots? There are 7 of them. 
+
+- Class: text
+  Output: Obviously, there's a DATA FRAME which contains the data you're trying to plot. Then the AESTHETIC MAPPINGS determine how data are mapped to color, size, etc. The GEOMS (geometric objects) are what you see in the plot (points, lines, shapes) and FACETS are the panels used in conditional plots. You've used these or seen them used in the first ggplot2 (qplot) lesson.
+
+- Class: text
+  Output: There are 3 more. STATS are statistical transformations such as binning, quantiles, and smoothing which ggplot2 applies to the data. SCALES show what coding an aesthetic map uses (for example, male = red, female = blue). Finally, the plots are depicted on a COORDINATE SYSTEM.
+
+
+- Class: text
+  Output: As in the base plotting system (and in contrast to the lattice system), when building plots with ggplot2, the plots are built up in layers, maybe in several steps. You can plot the data, then overlay a summary (for instance, a regression line or smoother) and then add any metadata and annotations you need.
+
+- Class: text
+  Output: I have downloaded some data for you - tweets_loc <- search_tweets("taipei", n = 10000, type = "recent", include_rts = TRUE, token = twitter_token) - tweets mentioning Taipei
+
+- Class: text
+  Output:  Two build a plot - we proceed step by step.
+
+- Class: cmd_question
+  Output: Let's firsts prepare the user data. Extract the user information with the function users_data() and save it in a new object user_taipei
+  CorrectAnswer: user_taipei <- users_data(tweets_loc)
+  AnswerTests: expr_creates_var("user_taipei"); omnitest(correctExpr='user_taipei <- users_data(tweets_loc)')
+  Hint: Type user_taipei <- users_data(tweets_loc) at the command prompt.
+
+- Class: cmd_question
+  Output: As you probably remember, we have a few duplicated users - let's filter them. Use duplicated inside of the box brackets for the rows and save the users in the same object.
+  CorrectAnswer: user_taipei <- user_taipei[!duplicated(user_taipei$user_id), ]
+  AnswerTests: omnitest(correctExpr='user_taipei <- user_taipei[!duplicated(user_taipei$user_id), ]')
+  Hint: Type user_taipei <- user_taipei[!duplicated(user_taipei$user_id), ] at the command prompt.
+
+- Class: cmd_question
+  Output: Just call the object user_taipei
+  CorrectAnswer: user_taipei
+  AnswerTests: omnitest(correctExpr='user_taipei')
+  Hint: Type user_taipei at the command prompt.
+
+- Class: cmd_question
+  Output: Let's analyze the language with a barplot - we first have to create an ordered data frame based in table. I have created the function (maybe you remember) table_df - extract with the $ the column with the language of the account and save your result in a new object taipei_lang
+  CorrectAnswer: taipei_lang <- table_df(user_taipei$account_lang)
+  AnswerTests: omnitest(correctExpr='taipei_lang <- table_df(user_taipei$account_lang)')
+  Hint: Type taipei_lang <- table_df(user_taipei$account_lang) at the command prompt.
+
+- Class: cmd_question
+  Output: We now have to know the column names of the data frame - check them with the function colnames()
+  CorrectAnswer: colnames(taipei_lang)
+  AnswerTests: omnitest(correctExpr='colnames(taipei_lang)')
+  Hint: Type use taipei_lang as argument in the colnames function.
+
+- Class: text
+  Output: Ok, now we know the numbers are in the column Freq and the names of the language are in column data_vector. We have to remember these names for ggplot
+
+- Class: cmd_question
+  Output: We only want to plot the first 20 languages. Subset the first 20 rows of taipei_lang with [] and save them in the same object called taipei_lang
+  CorrectAnswer: taipei_lang <- taipei_lang[1:20, ]
+  AnswerTests: omnitest(correctExpr='taipei_lang <- taipei_lang[1:20, ]')
+  Hint: Combine 1:20 with [] and taipei_lang. Remeber - rows are always left, columns right.
+
+- Class: cmd_question
+  Output: Ok, let's try to call ggplot() with the argument data=taipei_lang and the argument aes(x = data_vector, y= Freq). We want the name of the bars on the x-axis.
+  CorrectAnswer: ggplot(data=taipei_lang, aes(x = data_vector, y= Freq))
+  AnswerTests: omnitest(correctExpr='ggplot(data=taipei_lang, aes(x = data_vector, y= Freq))')
+  Hint: Type ggplot(data=taipei_lang, aes(x = data_vector, y= Freq)) at the command prompt.
+
+- Class: text
+  Output: You will now see the plot, but it is empty - we have to still add a geometric element.
+
+- Class: cmd_question
+  Output: Write exactly the same code as before and save it in the new object g. Use arrow up to get the last line of code you've written.
+  CorrectAnswer: g <- ggplot(data=taipei_lang, aes(x = data_vector, y= Freq))
+  AnswerTests: expr_creates_var("g"); omnitest(correctExpr='g <- ggplot(data=taipei_lang, aes(x = data_vector, y= Freq))')
+  Hint: Type  g <- ggplot(data=taipei_lang, aes(x = data_vector, y= Freq)) at the command prompt.
+  
+- Class: text
+  Output: You now see in the environment the new object g.
+
+- Class: text
+  Output: We now can add new parts to the ggplot object with + and save it again in g.
+
+- Class: cmd_question
+  Output: Add + geom_bar(stat="identity") to g - just call like that.
+  CorrectAnswer: g + geom_bar(stat="identity")
+  AnswerTests: omnitest(correctExpr='g + geom_bar(stat="identity")')
+  Hint: Type  g + geom_bar(stat="identity") at the command prompt.
+
+- Class: text
+  Output: Now we see the bars, but they are not ordered by frequency, they are ordered alphabetically.
+  
+- Class: cmd_question
+  Output: We have to create g again. This time use x = reorder(data_vector, Freq) inside of aes and save again in g.
+  CorrectAnswer: g <- ggplot(data=taipei_lang, aes(x = reorder(data_vector, Freq), y= Freq))
+  AnswerTests: omnitest(correctExpr='g <- ggplot(data=taipei_lang, aes(x = reorder(data_vector, Freq), y= Freq))')
+  Hint: Type g <- ggplot(data=taipei_lang, aes(x = reorder(data_vector, Freq), y= Freq)) at the command prompt.
+  
+- Class: cmd_question
+  Output: Add + geom_bar(stat="identity") to g - just call like that.
+  CorrectAnswer: g + geom_bar(stat="identity")
+  AnswerTests: omnitest(correctExpr='g + geom_bar(stat="identity")')
+  Hint: Type  g + geom_bar(stat="identity") at the command prompt.
+  
+- Class: text
+  Output: Great! Now we can work on the details in this plot.
+
+- Class: cmd_question
+  Output: Call the last line of code again and this time save it in g
+  CorrectAnswer:  g <- g + geom_bar(stat="identity")
+  AnswerTests: omnitest(correctExpr='g <- g + geom_bar(stat="identity")')
+  Hint: Type  g <- g + geom_bar(stat="identity") at the command prompt.
+
+- Class: cmd_question
+  Output: Now add + theme_bw(). This adds a complete nice theme - save it in g.
+  CorrectAnswer:  g <- g + theme_bw()
+  AnswerTests: omnitest(correctExpr='g <- g + theme_bw()')
+  Hint: Type  g <- g + theme_bw() at the command prompt.  
+
+- Class: cmd_question
+  Output: Just type g
+  CorrectAnswer:  g
+  AnswerTests: omnitest(correctExpr='g')
+  Hint: Type g at the command prompt.
+
+- Class: text
+  Output: Looks better, but not yet perfect.
+
+- Class: cmd_question
+  Output: With ylab and xlab we can add unique labels to an axis. the argument in xlab() has to be a string. Let's call the ylab "language frequency" and save it in g.
+  CorrectAnswer:  g <- g + ylab("language frequency")
+  AnswerTests: omnitest(correctExpr='g <- g + ylab("language frequency")')
+  Hint: Type g <- g + ylab("language frequency") at the command prompt.
+
+- Class: cmd_question
+  Output: With xlab use NULL as argument in xlab() (not string, just NULL), this deletes the label for the x-axis. Save in g
+  CorrectAnswer:  g <- g + xlab(NULL)
+  AnswerTests: omnitest(correctExpr='g <- g + xlab(NULL)')
+  Hint: Type g <- g + xlab(NULL) at the command prompt.
+
+- Class: cmd_question
+  Output: Just type g
+  CorrectAnswer:  g
+  AnswerTests: omnitest(correctExpr='g')
+  Hint: Type g at the command prompt.
+
+- Class: text
+  Output: Better now, but we can still improve the plot. With theme() we can change the specific labels on the x-axis.
+  
+- Class: cmd_question
+  Output: Now it gets a little bit complicated - add theme(axis.text.x=element_text(angle=90, size=14)) and save in g.
+  CorrectAnswer:  g <- g + theme(axis.text.x=element_text(angle=90, size=14))
+  AnswerTests: omnitest(correctExpr='g <- g + theme(axis.text.x=element_text(angle=90, size=14))')
+  Hint: Type g <- g + theme(axis.text.x=element_text(angle=90, size=14)) at the command prompt.  
+
+- Class: cmd_question
+  Output: Just type g
+  CorrectAnswer:  g
+  AnswerTests: omnitest(correctExpr='g')
+  Hint: Type g at the command prompt.
+  
+- Class: text
+  Output: As you can see - angle rotates the labels by 90 degrees - size increases the text size. But the position is slightly off. Let's change that.
+  
+- Class: cmd_question
+  Output: Add theme(axis.text.x=element_text(hjust = 1, vjust=0.5)) and save in g.
+  CorrectAnswer:  g <- g + theme(axis.text.x=element_text(hjust = 1, vjust=0.5))
+  AnswerTests: omnitest(correctExpr='g <- g + theme(axis.text.x=element_text(hjust = 1, vjust=0.5))')
+  Hint: Type g <- g + theme(axis.text.x=element_text(hjust = 1, vjust=0.5)) at the command prompt.  
+  
+- Class: cmd_question
+  Output: Just type g
+  CorrectAnswer:  g
+  AnswerTests: omnitest(correctExpr='g')
+  Hint: Type g at the command prompt.
+
+- Class: text
+  Output: If you want to cahnge something on the y-axis, just use axis.text.y instead.
+  
+
+- Class: cmd_question
+  Output: Now we focus on the white space between the x-axis and the bars - we can change that with scale_y_continuous(expand=c(0,0)) - try it and add it to g without saving
+  CorrectAnswer:  g + scale_y_continuous(expand=c(0,0))
+  AnswerTests: omnitest(correctExpr='g + scale_y_continuous(expand=c(0,0))')
+  Hint: Type g + scale_y_continuous(expand=c(0,0)) at the command prompt.    
+
+- Class: text
+  Output: We use _y_ as we want to change something on the y axis and continuous as we have continious data (numeric) for y.
+  
+
+- Class: cmd_question
+  Output: We can add limits as argument to get some space at the top. Write the same function as before (press arrow key up) - and add limit(0, 1100) as second argument. Save all in g.
+  CorrectAnswer:  g <- g + scale_y_continuous(expand=c(0,0), limits = c(0,1100))
+  AnswerTests: omnitest(correctExpr='g <- g + scale_y_continuous(expand=c(0,0), limits = c(0,1100))')
+  Hint: Type g <- g + scale_y_continuous(expand=c(0,0), limits = c(0,1100)) at the command prompt.    
+  
+- Class: cmd_question
+  Output: Just type g
+  CorrectAnswer:  g
+  AnswerTests: omnitest(correctExpr='g')
+  Hint: Type g at the command prompt.
+
+- Class: text
+  Output: I will show you one last trick with the function seq.
+  
+- Class: cmd_question
+  Output: Check what seq is doing with ?
+  CorrectAnswer:  ?seq
+  AnswerTests: omnitest(correctExpr='?seq')
+  Hint: Type ?seq at the command prompt.    
+
+- Class: cmd_question
+  Output: Now create a sequence from 0 to 1100 by 100 steps.
+  CorrectAnswer:  seq(0, 1100, 100)
+  AnswerTests: omnitest(correctExpr='seq(0, 1100, 100)')
+  Hint: Use 0, 1100 and 100 as arguments in seq() and just type it at the command prompt.    
+
+- Class: cmd_question
+  Output: Now we use seq(0, 1100, 100) as argument in scale_y_continuous(breaks = seq(0, 1100, 100)) - add this to g without saving.
+  CorrectAnswer:  g + scale_y_continuous(breaks = seq(0, 1100, 100))
+  AnswerTests: omnitest(correctExpr='g + scale_y_continuous(breaks = seq(0, 1100, 100))')
+  Hint: Type g + scale_y_continuous(breaks = seq(0, 1100, 100)) at the command prompt. 
+  
+- Class: text
+  Output: Great! Let's continue with scatterplots.
+
+
+- Class: cmd_question
+  Output: We create a new ggplot object called g1 - this time we use the columns followers_count for x in aes and for y friends_count and as data we use user_taipei.
+  CorrectAnswer: g1 <- ggplot(user_taipei, aes(x = followers_count, y = friends_count))
+  AnswerTests: expr_creates_var("g1"); omnitest(correctExpr='g1 <- ggplot(user_taipei, aes(x = followers_count, y = friends_count))')
+  Hint: Type g1 <- ggplot(user_taipei, aes(x = followers_count, y = friends_count)) at the command prompt.
+  
+- Class: cmd_question
+  Output: Add + geom_point() to g1 - just call like that.
+  CorrectAnswer: g1 + geom_point()
+  AnswerTests: omnitest(correctExpr='g1 + geom_point()')
+  Hint: Type  g1 + geom_point() at the command prompt.
+  
+- Class: text
+  Output: Ok, we have a few outliers and many with only a few follower and followee... Let's filter. You could use a log-log scale but for now we just filter.
+  
+- Class: cmd_question
+  Output: Type userslimited_df <- user_taipei[user_taipei$followers_count < 10000 & user_taipei$friends_count < 10000, ]
+  CorrectAnswer:  userslimited_df <- user_taipei[user_taipei$followers_count < 10000 & user_taipei$friends_count < 10000, ]
+  AnswerTests: omnitest(correctExpr='userslimited_df <- user_taipei[user_taipei$followers_count < 10000 & user_taipei$friends_count < 10000, ]')
+  Hint: Type  userslimited_df <- user_taipei[user_taipei$followers_count < 10000 & user_taipei$friends_count < 10000, ] at the command prompt.
+
+- Class: text
+  Output: As you can see in the environment, a few users were now excluded. We want TRUE for all followers_count < 10000 AND (that's the &) TRUE for all friends_count
+
+- Class: cmd_question
+  Output: We create g1 again, this time with userslimited_df for data (press arrow key up to use the old code and change the data argument)
+  CorrectAnswer: g1 <- ggplot(userslimited_df, aes(x = followers_count, y = friends_count))
+  AnswerTests: expr_creates_var("g1"); omnitest(correctExpr='g1 <- ggplot(userslimited_df, aes(x = followers_count, y = friends_count))')
+  Hint: Type g1 <- ggplot(userslimited_df, aes(x = followers_count, y = friends_count)) at the command prompt.
+
+- Class: cmd_question
+  Output: Add + geom_point() to g1 and save again in g1
+  CorrectAnswer: g1 <- g1 + geom_point()
+  AnswerTests: omnitest(correctExpr='g1 <- g1 + geom_point()')
+  Hint: Type g1 <- g1 + geom_point() at the command prompt.
+
+- Class: cmd_question
+  Output: Just type g1
+  CorrectAnswer:  g1
+  AnswerTests: omnitest(correctExpr='g1')
+  Hint: Type g1 at the command prompt.
+
+- Class: cmd_question
+  Output: You can add a regression line with geom_smooth - add geom_smooth(method=lm) - don't save it.
+  CorrectAnswer: g1 + geom_smooth(method=lm)
+  AnswerTests: omnitest(correctExpr='g1 + geom_smooth(method=lm)')
+  Hint: Type g1 + geom_smooth(method=lm) at the command prompt.
+
+
+- Class: text
+  Output: Ok, that's it for today - check out the code I created and try to work on own examples.
+
