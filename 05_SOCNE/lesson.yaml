@@ -291,7 +291,7 @@
 - Class: cmd_question
   Output: We create g1 again, this time with userslimited_df for data (press arrow key up to use the old code and change the data argument)
   CorrectAnswer: g1 <- ggplot(userslimited_df, aes(x = followers_count, y = friends_count))
-  AnswerTests: expr_creates_var("g1"); omnitest(correctExpr='g1 <- ggplot(userslimited_df, aes(x = followers_count, y = friends_count))')
+  AnswerTests: omnitest(correctExpr='g1 <- ggplot(userslimited_df, aes(x = followers_count, y = friends_count))')
   Hint: Type g1 <- ggplot(userslimited_df, aes(x = followers_count, y = friends_count)) at the command prompt.
 
 - Class: cmd_question
