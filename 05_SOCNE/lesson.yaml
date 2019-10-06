@@ -225,7 +225,7 @@
   
 
 - Class: cmd_question
-  Output: We can add limits as argument to get some space at the top. Write the same function as before (press arrow key up) - and add limits = (0, 2400) as second argument. Save all in g.
+  Output: We can add limits as argument to get some space at the top. Write the same function as before (press arrow key up) - and add limits = c(0, 2400) as second argument. Save all in g.
   CorrectAnswer:  g <- g + scale_y_continuous(expand=c(0,0), limits = c(0,2400))
   AnswerTests: omnitest(correctExpr='g <- g + scale_y_continuous(expand=c(0,0), limits = c(0,2400))')
   Hint: Type g <- g + scale_y_continuous(expand=c(0,0), limits = c(0,2400)) at the command prompt.    
